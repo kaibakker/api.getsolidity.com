@@ -42,7 +42,7 @@ if(data.method) {
       classes={classes}
       style={{backgroundColor: color}}
       onClick={() => onSelect(hash)}
-      onMouseLeave={() => onSelect(null)}
+      // onMouseLeave={() => onSelect(null)}
     >
 
       { data.to.substring(0, 10) }.{data.method.name }({data.method.params.map((param) => { return <Parameter parameter={param} /> }) } { data.value !== 0 && gweiToEther(data.value).toPrecision(2) } { data.value !== 0 && 'ETH' })

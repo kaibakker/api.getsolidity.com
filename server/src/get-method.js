@@ -1,7 +1,7 @@
 const {API_KEY, BASE_URL_CONTRACT} = require('../config');
 
-var redis = require("redis"),
-client = redis.createClient();
+// var redis = require("redis"),
+// client = redis.createClient();
 
 const abiDecoder = require('abi-decoder'); // NodeJS
 
@@ -31,7 +31,7 @@ module.exports = async function(tx) {
       var decodedData;
       // console.log(response.result)
       if(response.result && response.result.length > 0) {
-        client.set(tx.to, response.result)
+        // client.set(tx.to, response.result)
         abiDecoder.addABI(JSON.parse(response.result));
         decodedData = abiDecoder.decodeMethod(tx.input)
 
