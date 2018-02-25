@@ -1,6 +1,6 @@
 import React from 'react'; // eslint-disable-line no-unused-vars
 import './transaction.css';
-import {toGwei, gweiToEther} from '../../helper';
+import {gweiToEther} from '../../helper';
 import {TX_BLACK_ETHER} from '../../config';
 import Parameter from './../parameter/parameter'
 export default ({
@@ -41,12 +41,11 @@ if(data.method) {
     <div
       classes={classes}
       style={{backgroundColor: color}}
-      onMouseEnter={() => onSelect(hash)}
+      onClick={() => onSelect(hash)}
       onMouseLeave={() => onSelect(null)}
-      onClick={() => onClick(hash)}
     >
 
-      { data.to.substring(0, 10) }.{data.method.name }({data.method.params.map((param) => { return <Parameter parameter={param} /> }) } { data.value != 0 && gweiToEther(data.value).toPrecision(2) } { data.value != 0 && 'ETH' })
+      { data.to.substring(0, 10) }.{data.method.name }({data.method.params.map((param) => { return <Parameter parameter={param} /> }) } { data.value !== 0 && gweiToEther(data.value).toPrecision(2) } { data.value !== 0 && 'ETH' })
     </div>
 
   );

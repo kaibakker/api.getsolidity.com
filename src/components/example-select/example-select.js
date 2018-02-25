@@ -42,7 +42,7 @@ export default class ExampleSelect extends Component {
   onChange = (event, {newValue}) => {
     const {examples, onChange, defaultColor} = this.props;
     const activeExample = examples.find(({address}) => address === newValue);
-    let color = activeExample && activeExample.color || defaultColor;
+    let color = activeExample && (activeExample.color || defaultColor);
 
     if (!newValue) {
       color = '';

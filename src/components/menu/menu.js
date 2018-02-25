@@ -86,7 +86,8 @@ export default class Menu extends Component {
               {value: 'index', label: 'Index'},
               {value: 'value', label: 'Ether Value'},
               {value: 'gasPrice', label: 'Gas Price'},
-              {value: 'gasLimit', label: 'Gas Limit'}
+              {value: 'gasLimit', label: 'Gas Limit'},
+              {value: 'method', label: 'Method'}
             ]}
             onChange={value => this.setOption({sortOrder: value})}
           />

@@ -4,8 +4,6 @@ import {gweiToEther, ellipsedHash, toGwei, isMobile} from '../../helper';
 import {ETHERSCAN_BASE_URL} from '../../config';
 
 
-import Parameter from './../parameter/parameter'
-
 export default ({top, block, transaction, className = ''}) => (
   <div className={`details ${className}`} style={{top}}>
     {block && (
