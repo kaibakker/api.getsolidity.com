@@ -1,6 +1,8 @@
 require('isomorphic-fetch');
 const getCurrentBlockNumber = require('./get-current-block-number');
 const getMissingBlocks = require('./get-missing-blocks');
+const getMissingMethods = require('./get-missing-methods');
+const getMethod = require('./get-method');
 const sortBlocks = require('./sort-blocks');
 const stripBlock = require('./strip-block');
 const {log} = require('./helpers');
@@ -21,6 +23,25 @@ async function updateBlocks() {
   const missingBlocks = await getMissingBlocks(currentBlockNumber, blocks);
 
   const strippedMissingBlocks = missingBlocks.filter(Boolean).map(stripBlock);
+
+
+  // console.log(strippedMissingBlocks)
+  if(strippedMissingBlocks.length > 0 && strippedMissingBlocks[0].transactions && strippedMissingBlocks[0].transactions.length > 0) {
+    for(var i = 0; i < strippedMissingBlocks.length; i++) {
+      var newInputs = await getMissingMethods(strippedMissingBlocks[i])
+      var count = 0
+
+      newInputs.forEach((input) => {
+        if(input && typeof(input) === 'object') {
+          strippedMissingBlocks[i].transactions[count].method = input
+        }
+        count += 1
+      })
+    }
+
+
+  }
+
   const newBlocks = blocks.concat(strippedMissingBlocks);
 
   sortBlocks(newBlocks);

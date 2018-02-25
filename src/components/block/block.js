@@ -64,6 +64,8 @@ class Chain extends Component {
         onMouseEnter={() => this.handleMouseEnter()}
         onMouseLeave={() => onBlockSelect(null)}
       >
+        <br />
+        <br />
         {sortedTransactions.map(tx => (
           <Transaction
             data={tx}

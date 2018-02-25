@@ -2,9 +2,8 @@
 
 .block {
   width: $max-block-width;
-  padding: 10px;
-  display: flex;
-  flex-wrap: wrap-reverse;
+  padding: 30px;
+  overflow: hidden;
 }
 
 @media screen and (max-width: 500px) {

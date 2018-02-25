@@ -1,6 +1,7 @@
 module.exports = {
   API_KEY: process.env.API_KEY,
   BASE_URL: 'https://api.etherscan.io/api?module=proxy&action=',
+  BASE_URL_CONTRACT: 'https://api.etherscan.io/api?module=contract&action=',
   BLOCKS_IN_CACHE: 4,
   CONCURRENT_FETCHES: 2,
   REFRESH_INTERVAL: 5000,

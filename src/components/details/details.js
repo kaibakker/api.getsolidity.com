@@ -3,6 +3,9 @@ import './details.css';
 import {gweiToEther, ellipsedHash, toGwei, isMobile} from '../../helper';
 import {ETHERSCAN_BASE_URL} from '../../config';
 
+
+import Parameter from './../parameter/parameter'
+
 export default ({top, block, transaction, className = ''}) => (
   <div className={`details ${className}`} style={{top}}>
     {block && (
@@ -64,10 +67,15 @@ export default ({top, block, transaction, className = ''}) => (
         }
 
         <div className="details__txinput">
-          Input: {transaction.input.substr(0, 20)}
-          {transaction.input.length > 20 && '...'}
+          Input: {transaction.input.split(0, 20)}
         </div>
+
+
       </div>
     )}
   </div>
 );
+// {transaction.method && <div className="details__txinput">
+//   Method: { transaction.method.name }
+//   {transaction.method.params.map((param) => { return <Parameter parameter={param} /> }) }
+// </div> }
