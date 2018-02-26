@@ -30,26 +30,50 @@ export default ({
 
   const classes = [
     'transaction',
-    hasInput && 'transaction--input',
+    // hasInput && 'transaction--input',
     !to && 'transaction--create'
   ]
     .filter(Boolean)
     .join(' ');
 
-if(data.method) {
-  return (
-    <div
-      classes={classes}
-      style={{backgroundColor: color}}
-      onClick={() => onSelect(hash)}
-      // onMouseLeave={() => onSelect(null)}
-    >
+  if(data.method) {
+    return (
+      <div
+        className={classes}
+        style={{backgroundColor: color}}
+        onClick={() => onSelect(hash)}
+        // onMouseLeave={() => onSelect(null)}
+      >
 
-      { data.to.substring(0, 10) }.{data.method.name }({data.method.params.map((param) => { return <Parameter parameter={param} /> }) } { data.value !== 0 && gweiToEther(data.value).toPrecision(2) } { data.value !== 0 && 'ETH' })
-    </div>
+        { data.to.substring(0, 10) }.{data.method.name }({data.method.params.map((param) => { return <Parameter parameter={param} /> }) } { data.value !== 0 && gweiToEther(data.value).toPrecision(2) } { data.value !== 0 && 'ETH' })
+      </div>
 
-  );
-} else {
-  return <span />
-}
+    );
+  } else if(data.to) {
+    return  (
+      <div
+        className={classes}
+        style={{backgroundColor: color}}
+        onClick={() => onSelect(hash)}
+        // onMouseLeave={() => onSelect(null)}
+      >
+
+        { data.to && data.to.substring(0, 10) }.send( { data.value !== 0 && gweiToEther(data.value).toPrecision(2) } { data.value !== 0 && 'ETH' })
+      </div>
+
+    );
+  } else {
+    return  (
+      <div
+        className={classes}
+        style={{backgroundColor: color}}
+        onClick={() => onSelect(hash)}
+        // onMouseLeave={() => onSelect(null)}
+      >
+
+        { data.from && data.from.substring(0, 10) }.createContract()
+      </div>
+
+    );
+  }
 };

@@ -40,7 +40,7 @@ export default class ExampleSelect extends Component {
   }
 
   onChange = (event, {newValue}) => {
-    const {examples, onChange, defaultColor} = this.props;
+    const {examples, onChange, defaultColor} = this.props;// eslint-disable-line
     const activeExample = examples.find(({address}) => address === newValue);
     let color = activeExample && (activeExample.color || defaultColor);
 
@@ -50,7 +50,7 @@ export default class ExampleSelect extends Component {
 
     onChange({value: newValue, color});
 
-    this.setState({
+    this.setState({// eslint-disable-line
       value: newValue
     });
   };
@@ -58,15 +58,15 @@ export default class ExampleSelect extends Component {
   // Autosuggest will call this function every time you need to update
   // suggestions. You already implemented this logic above, so just use it.
   onSuggestionsFetchRequested = ({value}) => {
-    this.setState({
-      suggestions: getSuggestions(value, this.props.examples)
+    this.setState({// eslint-disable-line
+      suggestions: getSuggestions(value, this.props.examples)// eslint-disable-line
     });
   };
 
   // Autosuggest will call this function every time you need to clear
   // suggestions.
   onSuggestionsClearRequested = () => {
-    this.setState({
+    this.setState({ // eslint-disable-line
       suggestions: []
     });
   };

@@ -16,8 +16,4 @@ const getValue = function(parameter) {
     return parameter.value
   }
 }
-export default ({parameter}) => (
-  <span>
-     { getValue(parameter) + ", "}
-  </span>
-);
+export default ({parameter}) => { return getValue(parameter) + ", "};
