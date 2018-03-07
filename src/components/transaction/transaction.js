@@ -3,6 +3,8 @@ import './transaction.css';
 import {gweiToEther} from '../../helper';
 import {TX_BLACK_ETHER} from '../../config';
 import Parameter from './../parameter/parameter'
+
+
 export default ({
   data,
   onSelect,
@@ -36,7 +38,9 @@ export default ({
     .filter(Boolean)
     .join(' ');
 
-  if(data.method) {
+
+  if(data.abi && data.to) {
+    const decoded = [] //SolidityCoder.decodeParams(data.abi.inputs.map((item) => item.type), data.input.slice(10))
     return (
       <div
         className={classes}
@@ -44,8 +48,28 @@ export default ({
         onClick={() => onSelect(hash)}
         // onMouseLeave={() => onSelect(null)}
       >
+        $name $param1 $value1 $param2 $value2
+        { data.to && data.to.slice(0, 10) } { ''}
+        { data.abi.name.replace(/([A-Z])/g, function(str){ return " " + str.toLowerCase(); }) }
 
-        { data.to.substring(0, 10) }.{data.method.name }({data.method.params.map((param) => { return <Parameter parameter={param} /> }) } { data.value !== 0 && gweiToEther(data.value).toPrecision(2) } { data.value !== 0 && 'ETH' })
+        { data.abi.inputs && data.abi.inputs.map((input) => {
+          return  <Parameter parameter={ input } />
+        }) }
+
+        { data.abi.payable && `, ${gweiToEther(data.value).toPrecision(2)} ETH`}
+        <a href={'http://localhost:5800/contract/web3?address=' + data.to} >visit</a>
+      </div>
+
+    );
+  } else if(data.to && data.input == '0x') {
+    return  (
+      <div
+        className={classes}
+        style={{backgroundColor: color}}
+        onClick={() => onSelect(hash)}
+        // onMouseLeave={() => onSelect(null)}
+      >
+
       </div>
 
     );
@@ -58,7 +82,7 @@ export default ({
         // onMouseLeave={() => onSelect(null)}
       >
 
-        { data.to && data.to.substring(0, 10) }.send( { data.value !== 0 && gweiToEther(data.value).toPrecision(2) } { data.value !== 0 && 'ETH' })
+        { data.to && data.to.substring(0, 10) } unknown { data.value !== 0 && gweiToEther(data.value).toPrecision(2) } { data.value !== 0 && 'ETH' }
       </div>
 
     );
@@ -71,7 +95,7 @@ export default ({
         // onMouseLeave={() => onSelect(null)}
       >
 
-        { data.from && data.from.substring(0, 10) }.createContract()
+
       </div>
 
     );

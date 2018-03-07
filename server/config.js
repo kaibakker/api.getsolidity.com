@@ -7,5 +7,6 @@ module.exports = {
   LOAD_CONTRACT_INTERVAL: 200,
   PORT: 8000,
   ACTIVE_TIME: 1000 * 60,
-  BLOCK_CONFIRMATIONS: 5 // y is current block -> fetch y - BLOCK_CONFIRMATIONS
+  BLOCK_CONFIRMATIONS: 5, // y is current block -> fetch y - BLOCK_CONFIRMATIONS
+  MONGOOSE_URL: 'mongodb://localhost/getsolidity'
 };

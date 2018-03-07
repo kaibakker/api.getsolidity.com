@@ -1,12 +1,14 @@
-const getMethod = require('./get-method');
-const PQueue = require('p-queue');
-const {BLOCKS_IN_CACHE, CONCURRENT_FETCHES} = require('../config');
+const abiDecoder = require('abi-decoder'); // NodeJS
 
-// const queue = new PQueue({concurrency: CONCURRENT_FETCHES});
+
 
 module.exports = function(block) {
-  // console.log(block.transactions[0])
-  const inputs = block.transactions.map(tx => getMethod(tx));
-  // console.log(inputs)
-  return inputs;
+  return block.transactions.map(tx => {
+    try {
+      return abiDecoder.getMethodIDs()[tx.input.slice(2, 10)]
+    } catch(e) {
+      console.log(e)
+      return tx.input
+    }
+  });
 };

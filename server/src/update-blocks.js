@@ -7,6 +7,7 @@ const sortBlocks = require('./sort-blocks');
 const stripBlock = require('./strip-block');
 const {log} = require('./helpers');
 const loadABI = require('./load-abi')
+const loadTokens = require('./load-tokens')
 const {
   BLOCKS_IN_CACHE,
   REFRESH_INTERVAL,
@@ -19,6 +20,27 @@ let blocks = [];
 let contractBacklog = []
 let contractsLoaded = []
 let lastRequestTime = 0;
+//
+// var redis = require("redis"),
+//     client = redis.createClient();
+
+// if you'd like to select database 3, instead of 0 (default), call
+// client.select(3, function() { /* ... */ });
+
+// client.on("error", function (err) {
+//     console.log("Error " + err);
+// });
+//
+// client.set("string key", "string val", redis.print);
+//
+// client.hset(["hash key", "hashtest 2", "some other value"], redis.print);
+// client.hkeys("hash key", function (err, replies) {
+//     console.log(replies.length + " replies:");
+//     replies.forEach(function (reply, i) {
+//         console.log("    " + i + ": " + reply);
+//     });
+//     client.quit();
+// });
 
 async function updateBlocks() {
   const currentBlockNumber =
@@ -41,9 +63,14 @@ async function updateBlocks() {
       var newInputs = getMissingMethods(strippedMissingBlocks[i])
       var count = 0
 
-      newInputs.forEach((input) => {
-        if(input && typeof(input) === 'object') {
-          strippedMissingBlocks[i].transactions[count].method = input
+      newInputs.forEach((abi) => {
+        if(abi && typeof(abi) === 'object') {
+          strippedMissingBlocks[i].transactions[count].abi = abi
+          const to = strippedMissingBlocks[i].transactions[count].to
+          strippedMissingBlocks[i].transactions[count].to = loadTokens(to)
+          // const snor =
+          // console.log("snor", snor)
+          // strippedMissingBlocks[i].transactions[count].methods = SolidityCoder.decodeParams(abi.inputs.map((item) => item.type), strippedMissingBlocks[i].transactions[count].input.slice(10))
 
         } else if(strippedMissingBlocks[i].transactions[count].input != '0x') {
           contractBacklog.push(strippedMissingBlocks[i].transactions[count].to)
@@ -62,18 +89,18 @@ async function updateBlocks() {
     log('[DEBUG] updated blocks: ', blocks.map(b => b.number));
   }
 }
+
 async function updateContracts() {
-
-
   if(contractBacklog.length >= 1) {
 
 
     const contract = contractBacklog.shift()
-    if(!contractsLoaded.includes(contract)) {
+    if(contract && !contractsLoaded.includes(contract)) {
+      console.log("contract", contract)
       await loadABI(contract);
     }
     contractsLoaded.push(contract)
-    
+
     console.log("Update contract", contractBacklog.length, contractsLoaded.length)
   }
 }

@@ -1,19 +1,38 @@
-import React from 'react'; // eslint-disable-line no-unused-vars
+import React, {Component} from 'react'; // eslint-disable-line no-unused-vars
 import './parameter.css';
 
-const getValue = function(parameter) {
-  if(parameter.type === 'address') {
-    // if(parameter.value.substring(0, 10) == '0x00000000') {
-    //   return "Null Address"
-    // } else {
-    //   return parameter.value.substring(0, 10)
-    // }
-    return parameter.name
 
-  } else if(parameter.type === 'bytes32') {
-    return parameter.name
-  } else {
-    return parameter.value
+class Parameter extends Component {
+  constructor(props) {
+    super(props);
+    // console.log(props)
+    this.state = {
+      type: props.parameter.type,
+      value: props.parameter.value,
+      name: props.parameter.name,
+    };
+  }
+  getValue() {
+    if(this.state.type === 'address') {
+      // if(this.state.value.substring(0, 10) == '0x00000000') {
+      //   return "Null Address"
+      // } else {
+      //   return this.state.value.substring(0, 10)
+      // }
+      return this.state.name
+
+    } else if(this.state.type === 'bytes32') {
+      return this.state.name
+    } else if(this.state.type === 'bytes32') {
+      return this.state.name
+    } else if(typeof(this.state.value) === 'string'){
+      return this.state.value
+    }
+  }
+
+  render() {
+    console.log(this.state)
+    return <span> { this.state.name } </span>
   }
 }
-export default ({parameter}) => { return getValue(parameter) + ", "};
+export default Parameter;

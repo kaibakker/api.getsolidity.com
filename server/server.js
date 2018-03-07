@@ -3,8 +3,15 @@ const app = express();
 const morgan = require('morgan');
 const {getBlocks, setLastRequestTime} = require('./src/update-blocks');
 const cors = require('./src/cors');
-const {PORT, API_KEY} = require('./config');
+const {PORT, API_KEY, MONGOOSE_URL} = require('./config');
 const getAccount = require('./src/get-missing-account');
+const {getDecimalFromHex} = require('./src/helpers');
+
+const Contract = require('./models/contract')
+
+
+// const {promisify} = require('util');
+// const getAsync = promisify(client.hget).bind(client);
 
 app.use(
   morgan(
@@ -34,14 +41,49 @@ app.get('/blocks', (req, res) => {
   res.json(blocksToSend);
 });
 
-app.get('/account', async (req, res) => {
-  const address = parseInt(req.query.last, 10);
-  // console.log(blocks)
-  const blocks = await getAccount(address);
-  // console.log(blocks)
-  // const blocksToSend = blocks.filter(({number}) => number > lastNumber);
+app.get('/accounts/:address', async (req, res) => {
+  const heap = await getAccount(req.params.address);
 
-  res.json(blocks);
+  const transactions = heap.map(tx => ({
+    // creates: tx.creates,
+    from: tx.from,
+    gas: getDecimalFromHex(tx.gas),
+    gasPrice: getDecimalFromHex(tx.gasPrice),
+    hash: tx.hash,
+    input: tx.input,
+    to: tx.to,
+    abi: tx.abi,
+    methods: tx.methods,
+    i: getDecimalFromHex(tx.transactionIndex),
+    value:  getDecimalFromHex(tx.value)
+  }));
+
+  res.json(transactions);
+});
+
+app.get('/contracts/:address', async (req, res) => {
+  // const res2 = await getAsync(['ABIs', req.params.address]);
+  Contract.findOne({ contractName: req.params.address }).then((contract) => {
+    res.json(contract)
+  }).catch((err) => {
+    res.send(err)
+  })
+
+  // const transactions = heap.map(tx => ({
+  //   // creates: tx.creates,
+  //   from: tx.from,
+  //   gas: getDecimalFromHex(tx.gas),
+  //   gasPrice: getDecimalFromHex(tx.gasPrice),
+  //   hash: tx.hash,
+  //   input: tx.input,
+  //   to: tx.to,
+  //   abi: tx.abi,
+  //   methods: tx.methods,
+  //   i: getDecimalFromHex(tx.transactionIndex),
+  //   value:  getDecimalFromHex(tx.value)
+  // }));
+
+  // res.json(transactions);
 });
 
 console.log(`Listening on port ${PORT}`);

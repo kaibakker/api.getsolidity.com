@@ -9,7 +9,8 @@ function stripBlock(block) {
     hash: tx.hash,
     input: tx.input,
     to: tx.to,
-    method: tx.method,
+    abi: tx.abi,
+    methods: tx.methods,
     i: getDecimalFromHex(tx.transactionIndex),
     value: getDecimalFromHex(tx.value)
   }));
