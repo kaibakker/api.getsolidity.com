@@ -110,14 +110,13 @@ class Account extends Component {
     return (
       <div className={classes} >
 
-        {this.state.sortedTransactions.map(tx => {
+        { this.state.sortedTransactions.map(tx => {
           if(this.state.selectedTxHash === tx.hash) {
             return <div><input type="text" value={tx.hash} /></div>
           } else {
             return <div><Transaction data={tx} key={tx.hash} onSelect={txHash => this.setSelectedTransaction(txHash)} /></div>
           }
-        })}
-
+        }) }
 
       </div>
     );

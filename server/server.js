@@ -86,6 +86,14 @@ app.get('/contracts/:address', async (req, res) => {
   // res.json(transactions);
 });
 
+app.get('/contracts', (req, res) => {
+  Contract.find({ }).select({ "contractName": 1, "networks": 1}).then((contracts) => {
+    res.json(contracts)
+  }).catch((err) => {
+    res.send(err)
+  })
+})
+
 console.log(`Listening on port ${PORT}`);
 console.log(`Using API KEY: ${API_KEY}`);
 app.listen(PORT);

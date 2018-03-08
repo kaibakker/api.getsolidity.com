@@ -1,6 +1,8 @@
 export const API_URL = process.env.NODE_ENV === 'production' ?
   'https://api.etherview.net/' :
-  'http://localhost:8000/';
+  'http://188.166.83.230/';
+  // const server_url = 'http://188.166.83.230'
+
 export const REFRESH_TIME = 1000 * 10;
 export const TX_BLACK_ETHER = 20;
 export const CHAIN_MARGIN_TOP = 20;
