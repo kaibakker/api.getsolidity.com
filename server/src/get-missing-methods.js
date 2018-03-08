@@ -7,8 +7,7 @@ module.exports = function(block) {
     try {
       return abiDecoder.getMethodIDs()[tx.input.slice(2, 10)]
     } catch(e) {
-      console.log(e)
-      return tx.input
+      return null
     }
   });
 };

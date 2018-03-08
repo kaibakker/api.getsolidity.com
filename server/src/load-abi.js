@@ -16,19 +16,14 @@ const getABIUrl = address =>
 
 // https://api.etherscan.io/api?module=contract&action=getabi&address=0xBB9bc244D798123fDe783fCc1C72d3Bb8C189413&apikey=YourApiKeyToken
 
-// client.hgetall("MethodIds", function(err, obj) {
-//   if(err || !obj ) return;
-//   Object.keys(obj).forEach(function(key) {
-//     if(key != '') {
-//       // console.log(obj[key])
-//       let parsed = JSON.parse(obj[key])
-//       abiDecoder.setMethodIDs(key, parsed)
-//     }
-//
-//   })
-//   console.log("ength:", Object.keys(abiDecoder.getMethodIDs()).length )
-// })
-//
+Contract.find({}).then((contracts) => {
+  contracts.forEach(function(contract) {
+    abiDecoder.addABI(contract.abi)
+  })
+
+  console.log("ength:", Object.keys(abiDecoder.getMethodIDs()).length )
+})
+
 
 module.exports = async function(address) {
   // const res = await getAsync(['ABIs', contract]);
@@ -46,13 +41,9 @@ module.exports = async function(address) {
           return response.json()
         })
         .then(response => {
-          // console.log(response.result)
           if(response.result && response.result.length > 0) {
-            // client.set(contract, response.result)
             var abi = JSON.parse(response.result)
 
-            // store somewhere
-            // client.hset("ABIs", contract, response.result, redis.print);
             console.log(abi)
             const newContract = new Contract({
               contractName: address,

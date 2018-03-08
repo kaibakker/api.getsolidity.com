@@ -16,6 +16,9 @@ const {
   LOAD_CONTRACT_INTERVAL
 } = require('../config');
 
+const Contract = require('../models/contract')
+
+
 let blocks = [];
 let contractBacklog = []
 let contractsLoaded = []
@@ -42,6 +45,26 @@ let lastRequestTime = 0;
 //     client.quit();
 // });
 
+var addresses = []
+const updateAddresses = function() {
+  Contract.find({ }).select({ "contractName": 1, "networks": 1}).then((_contracts) => {
+    addresses = _contracts.map((contract) => {
+      try {
+        return contract.networks[1].address
+      } catch(err) {
+        return null
+      }
+
+    })
+  }).catch((err) => {
+    console.log("Not loaded addresses", err)
+  })
+}
+
+updateAddresses()
+
+
+
 async function updateBlocks() {
   const currentBlockNumber =
     (await getCurrentBlockNumber()) - BLOCK_CONFIRMATIONS;
@@ -60,26 +83,21 @@ async function updateBlocks() {
 
 
     for(var i = 0; i < strippedMissingBlocks.length; i++) {
-      var newInputs = getMissingMethods(strippedMissingBlocks[i])
+      const newInputs = getMissingMethods(strippedMissingBlocks[i])
+
       var count = 0
 
-      newInputs.forEach((abi) => {
-        if(abi && typeof(abi) === 'object') {
-          strippedMissingBlocks[i].transactions[count].abi = abi
-          const to = strippedMissingBlocks[i].transactions[count].to
-          strippedMissingBlocks[i].transactions[count].to = loadTokens(to)
-          // const snor =
-          // console.log("snor", snor)
-          // strippedMissingBlocks[i].transactions[count].methods = SolidityCoder.decodeParams(abi.inputs.map((item) => item.type), strippedMissingBlocks[i].transactions[count].input.slice(10))
+      newInputs.forEach((input) => {
+          if(input && typeof(input) === 'object' && addresses.includes(strippedMissingBlocks[i].transactions[count].to)) {
+            strippedMissingBlocks[i].transactions[count].abi = input
+          }
+          count += 1
 
-        } else if(strippedMissingBlocks[i].transactions[count].input != '0x') {
-          contractBacklog.push(strippedMissingBlocks[i].transactions[count].to)
-        }
-        count += 1
       })
+
     }
   }
-  console.log(contractBacklog)
+  // console.log(contractBacklog)
   const newBlocks = blocks.concat(strippedMissingBlocks);
 
   sortBlocks(newBlocks);
