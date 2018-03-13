@@ -29,10 +29,8 @@ const truffleContractSchema = mongoose.Schema({
   schemaVersion: { type: String },
   // updatedAt:
   networks: { type: mongoose.Schema.Types.Mixed },
-  "x-definitions": [{
-    type: { type: String },
-    body: { type: mongoose.Schema.Types.Mixed }
-
+  "x-interfaceIds": [{
+    type: mongoose.Schema.Types.Object, ref: "Documentation"
   }]
 });
 

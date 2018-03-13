@@ -9,6 +9,12 @@ const {getDecimalFromHex} = require('./src/helpers');
 
 const Contract = require('./models/contract')
 
+const Documenation = require('./models/documentation')
+
+Documenation.find({}).then(console.log)
+
+const des = (new Documenation({}))
+des.save()
 
 // const {promisify} = require('util');
 // const getAsync = promisify(client.hget).bind(client);
@@ -62,28 +68,11 @@ app.get('/accounts/:address', async (req, res) => {
 });
 
 app.get('/contracts/:address', async (req, res) => {
-  // const res2 = await getAsync(['ABIs', req.params.address]);
-  Contract.findOne({ contractName: req.params.address }).then((contract) => {
+  Contract.findOne({ contractName: req.params.address }).populate("x-interfaceIds").then((contract) => {
     res.json(contract)
   }).catch((err) => {
     res.send(err)
   })
-
-  // const transactions = heap.map(tx => ({
-  //   // creates: tx.creates,
-  //   from: tx.from,
-  //   gas: getDecimalFromHex(tx.gas),
-  //   gasPrice: getDecimalFromHex(tx.gasPrice),
-  //   hash: tx.hash,
-  //   input: tx.input,
-  //   to: tx.to,
-  //   abi: tx.abi,
-  //   methods: tx.methods,
-  //   i: getDecimalFromHex(tx.transactionIndex),
-  //   value:  getDecimalFromHex(tx.value)
-  // }));
-
-  // res.json(transactions);
 });
 
 app.get('/contracts', (req, res) => {
